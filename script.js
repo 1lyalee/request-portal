@@ -3,9 +3,9 @@
   const PRIORITIES = ['不着急', '正常', '有点急', '十万火急！'];
   const MAX_ESCAPES = 3;
   const ESCAPE_MOVES = [
-    { x: 30, y: -12 },
-    { x: -26, y: 16 },
-    { x: 18, y: 20 }
+    { x: 96, y: -34 },
+    { x: -88, y: 42 },
+    { x: 72, y: 52 }
   ];
 
   const state = {
@@ -19,6 +19,7 @@
 
   const views = {
     landing: document.getElementById('landingView'),
+    greeting: document.getElementById('greetingView'),
     form: document.getElementById('formView'),
     success: document.getElementById('successView')
   };
@@ -26,6 +27,9 @@
   const elements = {
     requestButton: document.getElementById('requestButton'),
     sayHiButton: document.getElementById('sayHiButton'),
+    greetingForm: document.getElementById('greetingForm'),
+    greetingMessage: document.getElementById('greetingMessage'),
+    greetingBackHomeButton: document.getElementById('greetingBackHomeButton'),
     formBackHomeButton: document.getElementById('formBackHomeButton'),
     requestForm: document.getElementById('requestForm'),
     content: document.getElementById('content'),
@@ -47,11 +51,16 @@
     elements.requestButton.addEventListener('pointerenter', handleRequestButtonPointerEnter);
     elements.requestButton.addEventListener('click', showForm);
     elements.sayHiButton.addEventListener('click', function () {
-      showToast('收到啦 👋 祝你今天开心！');
+      showGreeting();
     });
+    elements.greetingForm.addEventListener('submit', handleGreetingSubmit);
+    elements.greetingBackHomeButton.addEventListener('click', showLanding);
     elements.formBackHomeButton.addEventListener('click', showLanding);
     elements.requestForm.addEventListener('submit', handleSubmit);
-    elements.content.addEventListener('input', clearErrors);
+    elements.content.addEventListener('input', function () {
+      autoResizeTextarea(elements.content);
+      clearErrors();
+    });
     elements.requesterName.addEventListener('input', clearSubmissionError);
     elements.deadline.addEventListener('input', clearSubmissionError);
     elements.priorityGroup.addEventListener('click', handlePriorityClick);
@@ -59,10 +68,16 @@
     elements.receiptBackHomeButton.addEventListener('click', showLanding);
 
     showLanding();
+    autoResizeTextarea(elements.content);
   }
 
   function showLanding() {
     showView('landing');
+  }
+
+  function showGreeting() {
+    showView('greeting');
+    elements.greetingMessage.focus();
   }
 
   function showForm() {
@@ -76,9 +91,19 @@
   }
 
   function showView(viewName) {
+    resetEscapingButton();
     Object.keys(views).forEach(function (key) {
       views[key].hidden = key !== viewName;
     });
+  }
+
+  function resetEscapingButton() {
+    state.escapeCount = 0;
+    state.escapeOffset = { x: 0, y: 0 };
+    elements.requestButton.style.transform = '';
+    elements.requestButton.style.left = '';
+    elements.requestButton.style.top = '';
+    elements.requestButton.style.position = '';
   }
 
   function resetFormAndShow() {
@@ -89,6 +114,12 @@
     setSubmissionError('');
     setSubmitting(false);
     showForm();
+  }
+
+  function handleGreetingSubmit(event) {
+    event.preventDefault();
+    showToast('收到啦 👋 祝你今天开心！');
+    window.setTimeout(showLanding, 700);
   }
 
   function handlePriorityClick(event) {
@@ -192,6 +223,11 @@
     return payload;
   }
 
+  function autoResizeTextarea(textarea) {
+    textarea.style.height = '33px';
+    textarea.style.height = Math.max(33, textarea.scrollHeight) + 'px';
+  }
+
   async function submitRequest(payload) {
     try {
       const response = await fetch(API_URL, {
@@ -226,11 +262,11 @@
     addReceiptItem('需求内容', request.content);
 
     if (request.requesterName) {
-      addReceiptItem('你的名字', request.requesterName);
+      addReceiptItem('您的名字', request.requesterName);
     }
 
     if (request.deadline) {
-      addReceiptItem('Deadline', request.deadline);
+      addReceiptItem('截至时间', request.deadline);
     }
 
     if (request.priority) {
@@ -252,7 +288,7 @@
   function setSubmitting(isSubmitting) {
     state.isSubmitting = isSubmitting;
     elements.submitButton.disabled = isSubmitting;
-    elements.submitButton.textContent = isSubmitting ? '正在提交...' : '提交';
+    elements.submitButton.textContent = isSubmitting ? '正在提交...' : '发送';
   }
 
   function clearErrors() {
@@ -281,7 +317,7 @@
     elements.toast.hidden = false;
     state.toastTimer = window.setTimeout(function () {
       elements.toast.hidden = true;
-    }, 2600);
+    }, 1700);
   }
 
   function isTouchLikeDevice() {

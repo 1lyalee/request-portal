@@ -10,6 +10,11 @@ The front end has no build step and no framework. The Worker keeps Feishu creden
 index.html
 style.css
 script.js
+assets/
+  calendar-add-on.svg
+  check.svg
+  note-stack-add.svg
+  waving-hand.svg
 worker/
   worker.js
   worker.test.mjs
@@ -26,7 +31,7 @@ package.json
 - Landing page with `提需求` and `Just say hi`
 - `提需求` avoids the desktop mouse up to three times
 - Escaping behavior is disabled on touch devices and for reduced-motion users
-- `Just say hi` shows a temporary Toast
+- `Just say hi` opens the designed greeting state and shows a temporary Toast
 - Request form with required `需求内容`
 - Optional `你的名字`, `截止时间`, and `优先级`
 - Selectable and deselectable priority pills
@@ -36,6 +41,7 @@ package.json
 - Success receipt shows exactly the submitted values
 - Empty optional fields are hidden from the receipt
 - Cloudflare Worker supports mock mode and Feishu Bitable submission
+- Figma-provided icons are stored locally in `assets/`
 
 ## Run the Static Front End
 
