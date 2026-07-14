@@ -1,0 +1,16 @@
+{
+  "name": "yilia-request-portal",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "serve": "python3 -m http.server 5173 --bind 127.0.0.1",
+    "test": "node worker/worker.test.mjs",
+    "worker:dev": "wrangler dev worker/worker.js --ip 127.0.0.1",
+    "worker:deploy": "wrangler deploy"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "wrangler": "^3.95.0"
+  }
+}

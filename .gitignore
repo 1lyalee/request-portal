@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.vite/
+.wrangler/
+.npm-cache/
+.dev.vars
+.env
+.DS_Store
+*.local

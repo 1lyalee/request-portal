@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yilia Request Portal</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section id="landingView" class="panel landing-page" aria-labelledby="landingTitle">
+        <div class="landing-content">
+          <h1 id="landingTitle">哈喽，你有什么事呀～</h1>
+          <div class="action-row">
+            <button id="requestButton" type="button" class="button button-primary escaping-button">
+              提需求
+            </button>
+            <button id="sayHiButton" type="button" class="button button-secondary">
+              Just say hi
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="formView" class="panel form-page" aria-labelledby="formTitle" hidden>
+        <div class="page-header">
+          <h1 id="formTitle">提需求</h1>
+          <button id="formBackHomeButton" type="button" class="text-button">返回首页</button>
+        </div>
+
+        <form id="requestForm" class="request-form" novalidate>
+          <div class="field">
+            <label for="content">需求内容</label>
+            <textarea
+              id="content"
+              name="content"
+              rows="6"
+              placeholder="需要我做什么～"
+              required
+            ></textarea>
+            <p id="contentError" class="field-error" role="alert" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="requesterName">你的名字</label>
+            <input id="requesterName" name="requesterName" type="text" />
+          </div>
+
+          <div class="field">
+            <label for="deadline">截止时间</label>
+            <input id="deadline" name="deadline" type="text" />
+          </div>
+
+          <fieldset class="field-group">
+            <legend>优先级</legend>
+            <div id="priorityGroup" class="pill-group" role="group" aria-label="优先级">
+              <button type="button" class="pill" data-priority="不着急" aria-pressed="false">不着急</button>
+              <button type="button" class="pill" data-priority="正常" aria-pressed="false">正常</button>
+              <button type="button" class="pill" data-priority="有点急" aria-pressed="false">有点急</button>
+              <button type="button" class="pill" data-priority="十万火急！" aria-pressed="false">十万火急！</button>
+            </div>
+          </fieldset>
+
+          <p id="submissionError" class="submission-error" role="alert" aria-live="assertive" hidden></p>
+
+          <div class="form-actions">
+            <button id="submitButton" type="submit" class="button button-primary">提交</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="successView" class="panel receipt-page" aria-labelledby="receiptTitle" aria-live="polite" hidden>
+        <div class="receipt-header">
+          <h1 id="receiptTitle">你的需求已提交 ✓</h1>
+          <p>小亚已经收到，会尽快查看。</p>
+        </div>
+
+        <dl id="receiptList" class="receipt-list"></dl>
+
+        <div class="action-row">
+          <button id="createAnotherButton" type="button" class="button button-primary">再提一个需求</button>
+          <button id="receiptBackHomeButton" type="button" class="button button-secondary">返回首页</button>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="./script.js" defer></script>
+  </body>
+</html>
