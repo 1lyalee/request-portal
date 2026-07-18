@@ -2,7 +2,7 @@
 
 A small personal request portal built with plain HTML, CSS, vanilla JavaScript, and a Cloudflare Worker.
 
-The front end has no build step and no framework. The Worker keeps Feishu credentials server-side and writes valid submissions to Feishu Bitable.
+The front end has no build step and no framework. Request submissions are sent to the configured Google Apps Script Web App.
 
 ## Final Structure
 
@@ -55,20 +55,6 @@ Open:
 
 ```text
 http://127.0.0.1:5173
-```
-
-The front end submits to this default Worker URL:
-
-```text
-http://127.0.0.1:8787/api/requests
-```
-
-For a different endpoint, define this before `script.js` in `index.html`:
-
-```html
-<script>
-  window.YILIA_REQUEST_API_URL = "https://your-worker.example.com/api/requests";
-</script>
 ```
 
 ## Run the Worker Locally
@@ -196,8 +182,6 @@ Deploy the Worker:
 ```bash
 npm run worker:deploy
 ```
-
-Update `window.YILIA_REQUEST_API_URL` in `index.html` if the Worker URL differs from the local default.
 
 ## Information Still Needed
 

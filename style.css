@@ -1,6 +1,6 @@
 :root {
-  --font-serif-cn: "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", serif;
-  --font-number: "MiSans Latin", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  --font-serif-cn: "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-number: "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --color-black: #000000;
   --color-text: #050505;
   --color-muted: #757575;
@@ -68,6 +68,11 @@ body::after {
     radial-gradient(circle at 64% 42%, rgba(234, 239, 248, 0.36), rgba(255, 255, 255, 0) 58%);
 }
 
+body[data-active-view="landing"]::before,
+body[data-active-view="landing"]::after {
+  display: none;
+}
+
 button,
 input,
 textarea {
@@ -86,6 +91,13 @@ button:disabled {
   display: none !important;
 }
 
+.glass-filter-defs {
+  position: fixed;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
 .app-shell {
   position: relative;
   display: grid;
@@ -100,6 +112,8 @@ button:disabled {
 }
 
 .screen-inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   width: 100%;
   min-height: inherit;
@@ -113,6 +127,56 @@ button:disabled {
   align-items: center;
   justify-content: center;
   gap: 60px;
+}
+
+.landing-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.home-shader-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 214, 233, 0.68), rgba(255, 214, 233, 0) 38%),
+    radial-gradient(circle at 86% 16%, rgba(229, 243, 255, 0.85), rgba(229, 243, 255, 0) 42%),
+    radial-gradient(circle at 74% 80%, rgba(184, 255, 248, 0.58), rgba(184, 255, 248, 0) 44%),
+    linear-gradient(135deg, #ffffff 0%, #e5f3ffd9 38%, #ffd6e9 68%, #b8fff894 100%);
+  pointer-events: none;
+}
+
+.home-shader-background::before,
+.home-shader-background::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.home-shader-background::before {
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.home-shader-background::after {
+  z-index: 0;
+  background-image:
+    repeating-radial-gradient(circle at 16% 28%, rgba(0, 0, 0, 0.08) 0 0.5px, transparent 0.5px 2px),
+    repeating-radial-gradient(circle at 72% 64%, rgba(255, 255, 255, 0.28) 0 0.5px, transparent 0.5px 2.5px);
+  opacity: 0.12;
+  mix-blend-mode: soft-light;
+}
+
+.home-shader-background.shader-mounted {
+  background: transparent;
+}
+
+.home-shader-background canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .greeting-inner {
@@ -146,7 +210,7 @@ h1 {
   color: var(--color-black);
   font-family: var(--font-serif-cn);
   font-size: 32px;
-  font-weight: 600;
+  font-weight: 450;
   line-height: normal;
   letter-spacing: 0;
 }
@@ -159,7 +223,7 @@ h1 {
 .title-stack p {
   margin: 0;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: normal;
 }
 
@@ -199,17 +263,42 @@ h1 {
   gap: 20px;
   padding: 16px 32px 16px 16px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.2px;
   white-space: nowrap;
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.64);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.12) 48%, rgba(255, 255, 255, 0.26)),
+    rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.88),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.32),
+    inset 1px 0 1px rgba(255, 255, 255, 0.34),
+    0 10px 30px rgba(22, 28, 38, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.38);
+  -webkit-backdrop-filter: blur(24px) saturate(150%) brightness(1.08);
+  backdrop-filter: blur(24px) saturate(150%) brightness(1.08);
 }
 
 .glass-action:hover {
   border-color: rgba(255, 255, 255, 0.82);
-  background: #ffffff;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.18) 48%, rgba(255, 255, 255, 0.34)),
+    rgba(255, 255, 255, 0.24);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 10px 30px rgba(20, 25, 35, 0.045);
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.38),
+    inset 1px 0 1px rgba(255, 255, 255, 0.38),
+    0 12px 32px rgba(22, 28, 38, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+@supports ((-webkit-backdrop-filter: url("#homeGlassRefraction")) or (backdrop-filter: url("#homeGlassRefraction"))) {
+  .glass-action {
+    -webkit-backdrop-filter: url("#homeGlassRefraction") blur(20px) saturate(145%) brightness(1.08);
+    backdrop-filter: url("#homeGlassRefraction") blur(20px) saturate(145%) brightness(1.08);
+  }
 }
 
 .button-icon {
@@ -270,7 +359,7 @@ h1 {
 .round-control span {
   display: block;
   margin-top: -2px;
-  font-family: "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-serif-cn);
   font-size: 38px;
   font-weight: 300;
   line-height: 1;
@@ -312,7 +401,7 @@ label,
 legend {
   color: var(--color-black);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 450;
   line-height: normal;
 }
 
@@ -327,7 +416,7 @@ textarea {
   color: #2e2e2e;
   background: transparent;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: normal;
 }
 
@@ -401,7 +490,7 @@ button:focus-visible {
   border-color: var(--color-pill-border);
   padding: 2px 14px;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.2px;
   line-height: normal;
 }
@@ -434,7 +523,7 @@ button:focus-visible {
   border-radius: 999px;
   padding: 12px 24px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: normal;
 }
 
@@ -472,7 +561,7 @@ button:focus-visible {
   background: transparent;
   color: rgba(0, 0, 0, 0.58);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 450;
 }
 
 .field-error,
@@ -480,7 +569,7 @@ button:focus-visible {
   margin: 8px 0 0;
   color: #9f1d1d;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 #contentError {
@@ -508,7 +597,7 @@ button:focus-visible {
   box-shadow: var(--glass-shadow);
   color: #000000;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 450;
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   animation: toast-in 220ms ease both;
@@ -539,7 +628,7 @@ button:focus-visible {
 .queue-number span {
   color: var(--color-muted);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 450;
 }
 
 .queue-number strong {
@@ -574,7 +663,7 @@ button:focus-visible {
 .receipt-list dt {
   color: var(--color-muted);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 450;
   line-height: normal;
 }
 
@@ -583,7 +672,7 @@ button:focus-visible {
   margin: 0;
   color: var(--color-black);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 450;
   line-height: normal;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
@@ -610,34 +699,75 @@ button:focus-visible {
 @media (max-width: 720px) {
   :root {
     --content-width: min(361px, calc(100vw - 56px));
+    --mobile-padding-top: max(24px, env(safe-area-inset-top));
+    --mobile-padding-bottom: max(24px, env(safe-area-inset-bottom));
+  }
+
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  body {
+    overscroll-behavior-y: none;
   }
 
   .app-shell {
-    align-items: start;
-    padding: 24px 16px;
+    min-height: 100dvh;
+    place-items: center;
+    padding: var(--mobile-padding-top) 16px var(--mobile-padding-bottom);
   }
 
   .screen {
     width: 100%;
-    min-height: calc(100vh - 48px);
+    min-height: auto;
   }
 
   .screen-inner {
-    min-height: calc(100vh - 48px);
+    min-height: calc(100dvh - var(--mobile-padding-top) - var(--mobile-padding-bottom));
     padding: clamp(24px, 7vw, 40px) 0;
   }
 
   .landing-inner,
   .centered-inner {
+    align-items: center;
+    justify-content: center;
     gap: 48px;
   }
 
   .greeting-inner {
+    align-items: center;
+    justify-content: center;
     gap: 48px;
+  }
+
+  .form-inner {
+    align-items: center;
+  }
+
+  .success-inner {
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+  }
+
+  .hero-copy,
+  .title-stack,
+  .page-header,
+  .request-form,
+  .quiet-form,
+  .success-content,
+  .ticket-card,
+  .success-actions {
+    margin-inline: auto;
   }
 
   h1 {
     font-size: clamp(28px, 8.2vw, 32px);
+  }
+
+  .page-header .round-control {
+    justify-self: start;
   }
 
   .home-actions {
@@ -657,14 +787,22 @@ button:focus-visible {
     justify-content: flex-start;
   }
 
+  .success-content {
+    justify-items: center;
+  }
+
   .pill-group {
+    width: 100%;
     margin-left: 0;
+    justify-content: flex-start;
   }
 }
 
 @media (max-width: 420px) {
   :root {
     --content-width: calc(100vw - 40px);
+    --mobile-padding-top: max(20px, env(safe-area-inset-top));
+    --mobile-padding-bottom: max(20px, env(safe-area-inset-bottom));
   }
 
   .screen-inner {
@@ -688,9 +826,8 @@ button:focus-visible {
   }
 
   .pill-group {
-    width: max-content;
-    transform: scale(0.86);
-    transform-origin: left top;
+    flex-wrap: wrap;
+    transform: none;
   }
 }
 

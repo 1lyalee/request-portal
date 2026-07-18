@@ -1,6 +1,8 @@
 (function () {
   const APPS_SCRIPT_URL =
     'https://script.google.com/macros/s/AKfycbzLgnslrbPhVF22Fo2iHGQHTjY-7EoJ3OfmKowBlLivuKInz_plZ8G8BpHFuPXDdmsy/exec';
+  const PAPER_SHADERS_URL = 'https://esm.sh/@paper-design/shaders@0.0.77';
+  const HOME_SHADER_SPEED = 0.14;
   const PRIORITIES = ['不着急', '正常', '有点急', '十万火急！'];
   const MAX_ESCAPES = 3;
   const ESCAPE_MOVES = [
@@ -15,7 +17,10 @@
     escapeCount: 0,
     escapeOffset: { x: 0, y: 0 },
     escapeDisabled: true,
-    toastTimer: null
+    toastTimer: null,
+    homeShaderMount: null,
+    homeShaderTried: false,
+    activeView: 'landing'
   };
 
   const views = {
@@ -27,6 +32,7 @@
 
   const elements = {
     requestButton: document.getElementById('requestButton'),
+    homeShaderBackground: document.getElementById('homeShaderBackground'),
     sayHiButton: document.getElementById('sayHiButton'),
     greetingForm: document.getElementById('greetingForm'),
     greetingMessage: document.getElementById('greetingMessage'),
@@ -51,9 +57,7 @@
 
     elements.requestButton.addEventListener('pointerenter', handleRequestButtonPointerEnter);
     elements.requestButton.addEventListener('click', showForm);
-    elements.sayHiButton.addEventListener('click', function () {
-      showGreeting();
-    });
+    elements.sayHiButton.addEventListener('click', showGreeting);
     elements.greetingForm.addEventListener('submit', handleGreetingSubmit);
     elements.greetingBackHomeButton.addEventListener('click', showLanding);
     elements.formBackHomeButton.addEventListener('click', showLanding);
@@ -67,6 +71,7 @@
     elements.priorityGroup.addEventListener('click', handlePriorityClick);
     elements.createAnotherButton.addEventListener('click', resetFormAndShow);
     elements.receiptBackHomeButton.addEventListener('click', showLanding);
+    document.addEventListener('visibilitychange', updateHomeShaderPlayback);
 
     showLanding();
     autoResizeTextarea(elements.content);
@@ -93,9 +98,12 @@
 
   function showView(viewName) {
     resetEscapingButton();
+    state.activeView = viewName;
+    document.body.dataset.activeView = viewName;
     Object.keys(views).forEach(function (key) {
       views[key].hidden = key !== viewName;
     });
+    updateHomeShader(viewName);
   }
 
   function resetEscapingButton() {
@@ -148,7 +156,12 @@
   }
 
   function handleRequestButtonPointerEnter(event) {
-    if (state.escapeDisabled || event.pointerType !== 'mouse' || state.escapeCount >= MAX_ESCAPES) {
+    if (
+      !elements.requestButton ||
+      state.escapeDisabled ||
+      event.pointerType !== 'mouse' ||
+      state.escapeCount >= MAX_ESCAPES
+    ) {
       return;
     }
 
@@ -222,6 +235,67 @@
   function autoResizeTextarea(textarea) {
     textarea.style.height = '33px';
     textarea.style.height = Math.max(33, textarea.scrollHeight) + 'px';
+  }
+
+  async function updateHomeShader(viewName) {
+    if (viewName !== 'landing') {
+      updateHomeShaderPlayback();
+      return;
+    }
+
+    if (prefersReducedMotion() || state.homeShaderTried) {
+      updateHomeShaderPlayback();
+      return;
+    }
+
+    state.homeShaderTried = true;
+
+    try {
+      const shaders = await import(PAPER_SHADERS_URL);
+      const colors = ['#ffffff', '#e5f3ffd9', '#ffd6e9', '#b8fff894'].map(
+        shaders.getShaderColorFromString
+      );
+
+      state.homeShaderMount = new shaders.ShaderMount(
+        elements.homeShaderBackground,
+        shaders.meshGradientFragmentShader,
+        {
+          u_colors: colors,
+          u_colorsCount: colors.length,
+          u_distortion: 0.04,
+          u_swirl: 0.29,
+          u_grainMixer: 1,
+          u_grainOverlay: 0,
+          u_fit: shaders.ShaderFitOptions.cover,
+          u_scale: 0.32,
+          u_rotation: 0,
+          u_offsetX: -0.18,
+          u_offsetY: -0.02,
+          u_originX: 0.5,
+          u_originY: 0.5,
+          u_worldWidth: 1280,
+          u_worldHeight: 720
+        },
+        undefined,
+        HOME_SHADER_SPEED,
+        0
+      );
+
+      elements.homeShaderBackground.classList.add('shader-mounted');
+      updateHomeShaderPlayback();
+    } catch {
+      elements.homeShaderBackground.classList.add('shader-fallback');
+    }
+  }
+
+  function updateHomeShaderPlayback() {
+    if (!state.homeShaderMount || typeof state.homeShaderMount.setSpeed !== 'function') {
+      return;
+    }
+
+    const shouldAnimate =
+      state.activeView === 'landing' && !document.hidden && !prefersReducedMotion();
+    state.homeShaderMount.setSpeed(shouldAnimate ? HOME_SHADER_SPEED : 0);
   }
 
   async function submitRequest(payload) {
