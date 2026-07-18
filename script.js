@@ -1,5 +1,6 @@
 (function () {
-  const API_URL = window.YILIA_REQUEST_API_URL || 'http://127.0.0.1:8787/api/requests';
+  const APPS_SCRIPT_URL =
+    'https://script.google.com/macros/s/AKfycbzLgnslrbPhVF22Fo2iHGQHTjY-7EoJ3OfmKowBlLivuKInz_plZ8G8BpHFuPXDdmsy/exec';
   const PRIORITIES = ['不着急', '正常', '有点急', '十万火急！'];
   const MAX_ESCAPES = 3;
   const ESCAPE_MOVES = [
@@ -197,7 +198,7 @@
     setSubmitting(false);
 
     if (!result.success) {
-      setSubmissionError('提交失败了，请稍后再试。');
+      setSubmissionError('提交失败，请稍后再试。');
       return;
     }
 
@@ -206,21 +207,16 @@
 
   function buildPayload() {
     const content = elements.content.value.trim();
-    const payload = { content: content };
+    const name = elements.requesterName.value;
+    const deadline = elements.deadline.value;
+    const priority = state.selectedPriority;
 
-    if (elements.requesterName.value) {
-      payload.requesterName = elements.requesterName.value;
-    }
-
-    if (elements.deadline.value) {
-      payload.deadline = elements.deadline.value;
-    }
-
-    if (state.selectedPriority) {
-      payload.priority = state.selectedPriority;
-    }
-
-    return payload;
+    return {
+      content: content,
+      name: name,
+      deadline: deadline,
+      priority: priority
+    };
   }
 
   function autoResizeTextarea(textarea) {
@@ -230,18 +226,14 @@
 
   async function submitRequest(payload) {
     try {
-      const response = await fetch(API_URL, {
+      await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
+        mode: 'no-cors',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'text/plain;charset=utf-8'
         },
         body: JSON.stringify(payload)
       });
-
-      const data = await safeReadResponseJson(response);
-      if (!response.ok || !data || data.success !== true) {
-        return { success: false, error: data && data.error ? data.error : 'SUBMISSION_FAILED' };
-      }
 
       return { success: true };
     } catch {
@@ -249,20 +241,12 @@
     }
   }
 
-  async function safeReadResponseJson(response) {
-    try {
-      return await response.json();
-    } catch {
-      return null;
-    }
-  }
-
   function renderReceipt(request) {
     elements.receiptList.textContent = '';
     addReceiptItem('需求内容', request.content);
 
-    if (request.requesterName) {
-      addReceiptItem('您的名字', request.requesterName);
+    if (request.name) {
+      addReceiptItem('您的名字', request.name);
     }
 
     if (request.deadline) {

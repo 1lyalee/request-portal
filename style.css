@@ -423,7 +423,8 @@ button:focus-visible {
 }
 
 .solid-action,
-.light-action {
+.light-action,
+.secondary-action {
   display: inline-flex;
   width: var(--content-width);
   min-height: 47px;
@@ -448,6 +449,15 @@ button:focus-visible {
 
 .solid-action:disabled {
   opacity: 0.46;
+}
+
+.secondary-action {
+  background: rgba(0, 0, 0, 0.08);
+  color: #000000;
+}
+
+.secondary-action:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.12);
 }
 
 .light-action {
@@ -638,7 +648,8 @@ button:focus-visible {
 
   .glass-action,
   .solid-action,
-  .light-action {
+  .light-action,
+  .secondary-action {
     width: var(--content-width);
   }
 
