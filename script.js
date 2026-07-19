@@ -116,13 +116,18 @@
   }
 
   function resetFormAndShow() {
+    resetRequestForm();
+    showForm();
+  }
+
+  function resetRequestForm() {
     elements.requestForm.reset();
     state.selectedPriority = '';
     setPrioritySelection('');
     setContentError('');
     setSubmissionError('');
     setSubmitting(false);
-    showForm();
+    autoResizeTextarea(elements.content);
   }
 
   function handleGreetingSubmit(event) {
@@ -216,6 +221,7 @@
     }
 
     showSuccess(payload);
+    resetRequestForm();
   }
 
   function buildPayload() {
@@ -252,7 +258,7 @@
 
     try {
       const shaders = await import(PAPER_SHADERS_URL);
-      const colors = ['#ffffff', '#e5f3ffd9', '#ffd6e9', '#b8fff894'].map(
+      const colors = ['#ffffff', '#FFFCD5', '#ffd6e9', '#b8fff894'].map(
         shaders.getShaderColorFromString
       );
 

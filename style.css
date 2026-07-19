@@ -1,6 +1,78 @@
+@font-face {
+  font-family: "Source Han Serif SC";
+  src: url("./assets/fonts/SourceHanSerifSC-ExtraLight.otf") format("opentype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Han Serif SC";
+  src: url("./assets/fonts/SourceHanSerifSC-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Han Serif SC";
+  src: url("./assets/fonts/SourceHanSerifSC-Medium.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Han Serif SC";
+  src: url("./assets/fonts/SourceHanSerifSC-Medium.otf") format("opentype");
+  font-weight: 450;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Han Serif SC";
+  src: url("./assets/fonts/SourceHanSerifSC-SemiBold.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Han Serif SC";
+  src: url("./assets/fonts/SourceHanSerifSC-Bold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Han Serif SC";
+  src: url("./assets/fonts/SourceHanSerifSC-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Han Serif SC";
+  src: url("./assets/fonts/SourceHanSerifSC-Heavy.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Han Serif SC";
+  src: url("./assets/fonts/SourceHanSerifSC-Heavy.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --font-serif-cn: "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-number: "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif-cn: "Source Han Serif SC", "Noto Serif SC", serif;
+  --font-number: "Source Han Serif SC", "Noto Serif SC", serif;
   --color-black: #000000;
   --color-text: #050505;
   --color-muted: #757575;
@@ -141,9 +213,9 @@ button:disabled {
   overflow: hidden;
   background:
     radial-gradient(circle at 12% 18%, rgba(255, 214, 233, 0.68), rgba(255, 214, 233, 0) 38%),
-    radial-gradient(circle at 86% 16%, rgba(229, 243, 255, 0.85), rgba(229, 243, 255, 0) 42%),
+    radial-gradient(circle at 86% 16%, rgba(255, 252, 213, 0.85), rgba(255, 252, 213, 0) 42%),
     radial-gradient(circle at 74% 80%, rgba(184, 255, 248, 0.58), rgba(184, 255, 248, 0) 44%),
-    linear-gradient(135deg, #ffffff 0%, #e5f3ffd9 38%, #ffd6e9 68%, #b8fff894 100%);
+    linear-gradient(135deg, #ffffff 0%, #FFFCD5 38%, #ffd6e9 68%, #b8fff894 100%);
   pointer-events: none;
 }
 
@@ -157,7 +229,7 @@ button:disabled {
 
 .home-shader-background::before {
   z-index: 1;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .home-shader-background::after {
@@ -269,8 +341,8 @@ h1 {
   overflow: hidden;
   border-color: rgba(255, 255, 255, 0.64);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.12) 48%, rgba(255, 255, 255, 0.26)),
-    rgba(255, 255, 255, 0.18);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.06) 48%, rgba(255, 255, 255, 0.14)),
+    rgba(255, 255, 255, 0.04);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.88),
     inset 0 -1px 2px rgba(255, 255, 255, 0.32),
@@ -283,9 +355,7 @@ h1 {
 
 .glass-action:hover {
   border-color: rgba(255, 255, 255, 0.82);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.18) 48%, rgba(255, 255, 255, 0.34)),
-    rgba(255, 255, 255, 0.24);
+  background: #ffffff;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.96),
     inset 0 -1px 2px rgba(255, 255, 255, 0.38),
@@ -356,13 +426,10 @@ h1 {
     0 10px 30px rgba(20, 25, 35, 0.045);
 }
 
-.round-control span {
+.round-control .back-icon {
   display: block;
-  margin-top: -2px;
-  font-family: var(--font-serif-cn);
-  font-size: 38px;
-  font-weight: 300;
-  line-height: 1;
+  width: 20px;
+  height: 20px;
 }
 
 .status-control img {
