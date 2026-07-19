@@ -18,10 +18,11 @@
         <div id="homeShaderBackground" class="home-shader-background" aria-hidden="true"></div>
         <div class="screen-inner landing-inner">
           <div class="hero-copy">
-            <h1 id="landingTitle">
-              <span>哈喽</span>
-              <span>有什么可以帮到你～</span>
+            <h1 id="landingTitle" class="home-headline-title">
+              <span>Hey,</span>
+              <span>how can I help 👋</span>
             </h1>
+            <p class="home-headline-support">有什么可以帮到你 ^ ^</p>
           </div>
 
           <div class="home-actions">
@@ -38,6 +39,8 @@
               <span>打个招呼</span>
             </button>
           </div>
+
+          <p class="home-footer-label">#小亚的任务收集bot</p>
         </div>
       </section>
 
@@ -100,8 +103,18 @@
               <label for="deadline">截止时间</label>
               <div class="input-row">
                 <input id="deadline" name="deadline" type="text" />
-                <img class="field-icon" src="./assets/calendar-add-on.svg" alt="" />
+                <button
+                  id="deadlineCalendarButton"
+                  class="field-icon-button"
+                  type="button"
+                  aria-label="选择截止时间"
+                  aria-haspopup="dialog"
+                  aria-expanded="false"
+                >
+                  <img class="field-icon" src="./assets/calendar-add-on.svg" alt="" />
+                </button>
               </div>
+              <div id="deadlineDatePicker" class="date-picker" role="dialog" aria-label="选择截止时间" hidden></div>
             </div>
 
             <fieldset class="field-group priority-field">
